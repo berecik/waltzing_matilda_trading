@@ -1,5 +1,4 @@
 import sys
-import pytest
 
 from .base import INSTALLED_APPS
 from config import config

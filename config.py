@@ -16,8 +16,10 @@ class Settings(BaseSettings):
 
     project_name: str = PROJECT_NAME
     redis_dns: RedisDsn = "redis://localhost:6379/0"
-    media_root: str = "media"
-    static_root: str = "static"
+    media_root: str = base_dir("media").file_path
+    media_url: str = "media/"
+    static_root: str = base_dir("static").file_path
+    static_url: str = "static/"
     debug: bool = True  # bool_value
     project_env: str = 'local'
     postgres_engine: str = 'django.contrib.gis.db.backends.postgis'
@@ -34,5 +36,9 @@ class Settings(BaseSettings):
     allowed_hosts: str = "*"
     django_admin_url: str = 'admin/'
     logging_level: str = 'INFO'
+
+    django_superuser_username: str = ""
+    django_superuser_password: str = ""
+    django_superuser_email: str = ""
 
 config = Settings()
