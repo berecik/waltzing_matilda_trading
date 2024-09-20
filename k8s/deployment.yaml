@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trading-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trading-web
+  template:
+    metadata:
+      labels:
+        app: trading-web
+    spec:
+      containers:
+        - name: web
+          image: your_dockerhub_username/trading-web:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: trading-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: trading-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: trading-secret
+                  key: POSTGRES_PASSWORD
+            - name: CELERY_BROKER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: trading-config
+                  key: CELERY_BROKER_URL
+            - name: CELERY_RESULT_BACKEND
+              valueFrom:
+                configMapKeyRef:
+                  name: trading-config
+                  key: CELERY_RESULT_BACKEND
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: "/health/readiness"
+          livenessProbe:
+            httpGet:
+              port: 8000
+              path: "/health/healthz"
+          startupProbe:
+            httpGet:
+              port: 8000
+              path: "/health/healthz"
+            initialDelaySeconds: 15
+            failureThreshold: 5
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trading-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trading-worker
+  template:
+    metadata:
+      labels:
+        app: trading-worker
+    spec:
+      containers:
+        - name: worker
+          image: your_dockerhub_username/trading-worker:latest
+          command: ["celery", "-A", "waltzing_matilda_trading", "worker", "--loglevel=info"]
+          envFrom:
+            - configMapRef:
+                name: trading-config
+            - secretRef:
+                name: trading-secret

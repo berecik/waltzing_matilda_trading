@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "waltzing-matilda-trading"
+version = "0.1.0"
+description = "Waltzing Matilda Trading is a Django application for trading stocks. For better performance, it uses Daphne, Ninja and Celery."
+readme = "README.md"
+authors = ["Adam Manczuk <beret@hipisi.org.pl>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+# Django framework
+Django = "^5.1.1"
+
+# Django Ninja asynchronous API framework
+django-ninja = "*"
+daphne = "*"
+
+# Celery distributed task queue
+celery = "*"
+django-celery-beat = "*"
+
+# Settings management
+split_settings = "*"
+pydantic = "*"
+pydantic-settings = "*"
+beret-utils = "*"
+
+# PostgreSQL database
+psycopg2 = "*"
+django-prometheus = "^2.3.1"
+pytest-cov = "^5.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pytest-django = "*"
+pytest-asyncio = "*"
+pytest-celery = "*"
+httpx = "*"
+
+pep8 = "*"
+black = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
