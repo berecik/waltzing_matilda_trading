@@ -22,6 +22,7 @@ RUN poetry config virtualenvs.create false \
 
 # Copy project
 COPY . /app/
+COPY docker.env /app/.env
 
 # Expose port 8000
 EXPOSE 8000
