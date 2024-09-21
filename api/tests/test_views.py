@@ -1,58 +1,74 @@
-import pytest
 from asgiref.sync import sync_to_async
+from django.test import TestCase
 from django.contrib.auth.models import User
+from ninja.testing import TestAsyncClient
+from ninja_jwt.tokens import RefreshToken
+from twisted.protocols.amp import Decimal
+from zope.interface.common import optional
 
+from api.views import api
 from api.models import Stock, Order
-from api.views import api as ninja_api
+from datetime import datetime, timedelta
+import jwt
+from django.conf import settings
 
+ninja_test_client = TestAsyncClient(api)
 
-@pytest.fixture
-def api_client():
-    from ninja.testing import TestClient
-    return TestClient(ninja_api)
+class TestAsyncViews(TestCase):
+    def setUp(self):
+        self.client = ninja_test_client
+        # Create a test user
+        self.user, _ = User.objects.get_or_create(username='testuser')
+        self.user.save()
+        # Create a test stock
+        self.stock = Stock.objects.create(name='TestStock', price=100)
+        # # Generate JWT token for authentication
+        # payload = {
+        #     'user_id': self.user.id,
+        #     'exp': datetime.now() + timedelta(hours=24),
+        #     'iat': datetime.now(),
+        # }
+        # self.token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        # self.auth_header = {'Authorization': f'Bearer {self.token}'}
+        refresh = RefreshToken.for_user(self.user)
+        access_token = str(refresh.access_token)
+        self.client.headers = {
+            'Authorization': f'Bearer {access_token}'
+        }
 
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_place_order(api_client):
-    user = await sync_to_async(User.objects.create_user)(
-        username='testuser', password='testpass'
-    )
-    stock = await sync_to_async(Stock.objects.create)(
-        name='TestStock', price=100
-    )
-    api_client.client.login(username='testuser', password='testpass')
-    payload = {
-        "stock_id": stock.id,
-        "quantity": 10,
-        "order_type": "buy"
-    }
-    response = await api_client.post("/orders/order", payload)
-    assert response.status_code == 200
-    assert response.json()['success'] == True
-    order_id = response.json()['order_id']
-    order = await sync_to_async(Order.objects.get)(id=order_id)
-    assert order.user == user
-    assert order.stock == stock
-    assert order.quantity == 10
-    assert order.order_type == 'buy'
+    async def test_place_order(self):
+        payload = {
+            "stock_id": self.stock.id,
+            "quantity": 10,
+            "order_type": "buy"
+        }
+        response = await self.client.post("/orders/order", json=payload)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['success'])
+        order_id = response.json()['order_id']
+        # Verify the order exists in the database
+        order = await sync_to_async(Order.objects.get)(id=order_id)
+        self.assertEqual(order.user_id, self.user.id)
+        self.assertEqual(order.stock_id, self.stock.id)
+        self.assertEqual(order.quantity, 10)
+        self.assertEqual(order.order_type, 'buy')
 
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_total_investment(api_client):
-    user = await sync_to_async(User.objects.create_user)(
-        username='testuser', password='testpass'
-    )
-    stock = await sync_to_async(Stock.objects.create)(
-        name='TestStock', price=100
-    )
-    await sync_to_async(Order.objects.create)(
-        user=user, stock=stock, quantity=10, order_type='buy'
-    )
-    await sync_to_async(Order.objects.create)(
-        user=user, stock=stock, quantity=5, order_type='sell'
-    )
-    api_client.client.login(username='testuser', password='testpass')
-    response = await api_client.get(f"/orders/total/{stock.id}")
-    assert response.status_code == 200
-    total_investment = response.json()['total_investment']
-    assert total_investment == 500  # (10*100) - (5*100)
+    async def test_total_investment(self):
+        # Create some orders
+        await sync_to_async(Order.objects.create)(user=self.user, stock=self.stock, quantity=10, order_type='buy')
+        await sync_to_async(Order.objects.create)(user=self.user, stock=self.stock, quantity=5, order_type='sell')
+        response = await self.client.get(f"/orders/total/{self.stock.id}")
+        self.assertEqual(response.status_code, 200)
+        total_investment = response.json()['total_investment']
+        self.assertEqual(float(total_investment), float(500))  # (10*100) - (5*100)
+
+    async def test_invalid_token(self):
+        # Use an invalid token
+        invalid_auth_header = {'Authorization': 'Bearer invalidtoken'}
+        payload = {
+            "stock_id": self.stock.id,
+            "quantity": 10,
+            "order_type": "buy"
+        }
+        response = await self.client.post("/orders/order", json=payload, headers=invalid_auth_header)
+        self.assertEqual(response.status_code, 401)

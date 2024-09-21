@@ -1,3 +1,5 @@
+from functools import cached_property
+
 from asgiref.sync import sync_to_async
 from django.db import models
 from django.contrib.auth.models import User
@@ -11,9 +13,7 @@ class Stock(models.Model):
             self.order_set.filter(user=user)
         )
         total = sum(
-            order.value for order in orders if order.order_type == 'buy'
-        ) - sum(
-            order.value for order in orders if order.order_type == 'sell'
+            order.value * (1 if order.order_type == 'buy' else -1) for order in orders
         )
 
         return total
@@ -35,7 +35,7 @@ class Order(models.Model):
     order_type = models.CharField(max_length=4, choices=ORDER_TYPES)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    @property
+    @cached_property
     def value(self):
         return self.quantity * self.stock.price
 

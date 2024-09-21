@@ -7,5 +7,6 @@ include(
     'celery.py',
     'healthz.py',
     'logging.py',
+    'jwt.py',
     optional(f'envs/{config.project_env}.py')
 )

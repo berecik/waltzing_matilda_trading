@@ -26,7 +26,6 @@ def _file_processor(file_path: PathLike):
         logger.info(f"Successfully processed and removed file: {file_path}")
 
 
-@contextmanager
 def _data_processor(row: dict):
     try:
         user = User.objects.get(username=row['username'])
@@ -46,8 +45,10 @@ def _data_processor(row: dict):
         logger.error(f"Error processing row {row}: {e}")
 
 
-def scan_files(csv_path: PathData = config.csv_path):
-    if not os.path.exists(csv_path):
+def scan_files(csv_path: PathData|None = None):
+    if csv_path is None:
+        csv_path = config.csv_path
+    if not os.path.exists(csv_path) or not os.path.isdir(csv_path):
         logger.warning(f"{csv_path} does not exist.")
         return
 
@@ -56,7 +57,7 @@ def scan_files(csv_path: PathData = config.csv_path):
         yield file_path
 
 def process_file(
-        file_path,
+        file_path: PathLike,
         file_processor=_file_processor,
         data_processor=_data_processor
 ):

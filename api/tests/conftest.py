@@ -5,8 +5,22 @@ from asgiref.sync import sync_to_async
 from beret_utils import PathData
 from django.conf import settings
 from django.contrib.auth.models import User
+from ninja_extra.testing import TestAsyncClient
 
 from api.models import Stock
+from api.views import api
+
+ninja_test_client = TestAsyncClient(api)
+
+@pytest.fixture
+def client():
+    return ninja_test_client
+
+@pytest.fixture
+def user(db):
+    test_user = User.objects.create_user(username='testuser', password='testpass')
+    test_user.save()
+    return test_user
 
 
 @pytest.fixture(scope='session')
@@ -64,32 +78,6 @@ def create_csv_file(tmp_csv_path):
 @pytest.fixture
 def csv_data():
     return [
-        {'username': 'john_doe', 'stock_name': 'Apple', 'stock_price': '150.00', 'quantity': '10', 'order_type': 'buy'},
-        {'username': 'jane_doe', 'stock_name': 'Google', 'stock_price': '2800.00', 'quantity': '5',
-         'order_type': 'sell'},
+        {'username': 'john_doe', 'stock_name': 'Apple', 'quantity': '10', 'order_type': 'buy'},
+        {'username': 'jane_doe', 'stock_name': 'Google', 'quantity': '5', 'order_type': 'sell'},
     ]
-
-
-@pytest.fixture
-async def test_users():
-    # Create test users
-    user1 = await sync_to_async(User.objects.create_user)(
-        username='john_doe', password='testpass'
-    )
-    user2 = await sync_to_async(User.objects.create_user)(
-        username='jane_doe', password='testpass'
-    )
-    return [user1, user2]
-
-
-@pytest.fixture
-async def test_stocks():
-    # Create test stocks
-    stock1 = await sync_to_async(Stock.objects.create)(
-        name='Apple', price=150.00
-    )
-    stock2 = await sync_to_async(Stock.objects.create)(
-        name='Google', price=2800.00
-    )
-
-    return [stock1, stock2]

@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     postgres_password: str = 'postgres'
     postgres_host: str = 'postgres'
     postgres_port: str = ''
-    postgres_atomic_requests: bool = True  # bool_value
+    postgres_atomic_requests: bool = False  # You cannot use ATOMIC_REQUESTS with async views.
 
     django_email_host_user: str = 'admin@matilda.com'
     django_email_host_password: str = 'key'
@@ -46,8 +46,8 @@ class Settings(BaseSettings):
 
     redis_dns: RedisDsn = 'redis://localhost:6379/0'
     rabbitmq_dns: AmqpDsn = 'amqp://localhost:5672/'
-    celery_broker_url: str = rabbitmq_dns
-    celery_result_backend: str = rabbitmq_dns
+    celery_broker_url: str = redis_dns
+    celery_result_backend: str = redis_dns
 
     ## Django Superuser credentials
     # usage:
