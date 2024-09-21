@@ -1,27 +1,18 @@
+import logging
+
 from celery import shared_task
-import csv
-from .models import Stock, Order
-from django.contrib.auth.models import User
-import os
 
-from config import config, base_dir
+from .utils import process_file, scan_files
 
+logger = logging.getLogger(__name__)
 
 @shared_task
 def parse_csv():
-    csv_path = base_dir('csv_files')
-    if not os.path.exists(csv_path):
-        return
-    for csv_file in csv_path:
-        with open(csv_path, 'r') as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                user = User.objects.get(username=row[0])
-                stock, _ = Stock.objects.get_or_create(name=row[1], defaults={'price': row[2]})
-                Order.objects.create(
-                    user=user,
-                    stock=stock,
-                    quantity=int(row[3]),
-                    order_type=row[4],
-                )
-        os.remove(csv_file)
+    for file_path in scan_files():
+        logger.info(f"Dispatching task to process file: {file_path}")
+        process_csv.delay(file_path)
+
+@shared_task
+def process_csv(file_path):
+    logger.info(f"Process file: {file_path}")
+    process_file(file_path)

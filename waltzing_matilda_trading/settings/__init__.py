@@ -7,5 +7,5 @@ include(
     'celery.py',
     'healthz.py',
     'logging.py',
-    # optional(f'project_envs/{config.PROJECT_ENV}.py')
+    optional(f'envs/{config.project_env}.py')
 )
