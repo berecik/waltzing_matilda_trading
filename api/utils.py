@@ -13,10 +13,11 @@ from .models import Stock
 
 logger = logging.getLogger(__name__)
 
+
 @contextmanager
 def _file_processor(file_path: PathLike):
     try:
-        with open(file_path, 'r') as csvfile:
+        with open(file_path, "r") as csvfile:
             reader = csv.DictReader(csvfile)
             yield reader
     except Exception as e:
@@ -28,13 +29,13 @@ def _file_processor(file_path: PathLike):
 
 def _data_processor(row: dict):
     try:
-        user = User.objects.get(username=row['username'])
-        stock = Stock.objects.get(name=row['stock_name'])
+        user = User.objects.get(username=row["username"])
+        stock = Stock.objects.get(name=row["stock_name"])
         return Order(
             user=user,
             stock=stock,
-            quantity=int(row['quantity']),
-            order_type=row['order_type'],
+            quantity=int(row["quantity"]),
+            order_type=row["order_type"],
         )
 
     except User.DoesNotExist:
@@ -45,7 +46,7 @@ def _data_processor(row: dict):
         logger.error(f"Error processing row {row}: {e}")
 
 
-def scan_files(csv_path: PathData|None = None):
+def scan_files(csv_path: PathData | None = None):
     if csv_path is None:
         csv_path = config.csv_path
     if not os.path.exists(csv_path) or not os.path.isdir(csv_path):
@@ -56,10 +57,11 @@ def scan_files(csv_path: PathData|None = None):
         logger.info(f"Dispatching task to process file: {file_path}")
         yield file_path
 
+
 def process_file(
-        file_path: PathLike,
-        file_processor=_file_processor,
-        data_processor=_data_processor
+    file_path: PathLike,
+    file_processor=_file_processor,
+    data_processor=_data_processor,
 ):
     logger.info(f"Processing file: {file_path}")
 

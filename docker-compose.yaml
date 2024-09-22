@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   web:
+    env_file:
+      - docker.env
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,10 +13,12 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - postgres
       - redis
 
   worker:
+    env_file:
+      - docker.env
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,10 +26,12 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      - postgres
       - redis
 
   beat:
+    env_file:
+      - docker.env
     build:
       context: .
       dockerfile: Dockerfile
@@ -33,22 +39,18 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db
+      - postgres
       - redis
 
   redis:
-    image: redis:6.2-alpine
-    ports:
-      - "6379:6379"
+    image: redis:6
+    env_file:
+      - docker.env
 
-  db:
+  postgres:
     image: postgres:13-alpine
-    environment:
-      POSTGRES_DB: waltzing_matilda_trading
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-    ports:
-      - "5432:5432"
+    env_file:
+      - docker.env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 

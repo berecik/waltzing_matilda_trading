@@ -1,4 +1,4 @@
-from pydantic import  RedisDsn, AmqpDsn
+from pydantic import RedisDsn, AmqpDsn
 from pydantic_settings import BaseSettings
 from beret_utils import PathData
 
@@ -26,26 +26,28 @@ class Settings(BaseSettings):
     debug: bool = True  # bool_value
     secret_key: str = "django-insecure-key"
     allowed_hosts: str = "*"
-    django_admin_url: str = 'admin/'
-    logging_level: str = 'INFO'
+    django_admin_url: str = "admin/"
+    logging_level: str = "INFO"
 
-    project_env: str = 'local'
+    project_env: str = "local"
 
-    postgres_engine: str = 'django.db.backends.postgresql'
+    postgres_engine: str = "django.db.backends.postgresql"
     postgres_db: str = project_name
-    postgres_user: str = 'postgres'
-    postgres_password: str = 'postgres'
-    postgres_host: str = 'postgres'
-    postgres_port: str = ''
-    postgres_atomic_requests: bool = False  # You cannot use ATOMIC_REQUESTS with async views.
+    postgres_user: str = "postgres"
+    postgres_password: str = "postgres"
+    postgres_host: str = "postgres"
+    postgres_port: str = ""
+    postgres_atomic_requests: bool = (
+        False  # You cannot use ATOMIC_REQUESTS with async views.
+    )
 
-    django_email_host_user: str = 'admin@matilda.com'
-    django_email_host_password: str = 'key'
+    django_email_host_user: str = "admin@matilda.com"
+    django_email_host_password: str = "key"
 
     use_docker: bool = False  # bool_value
 
-    redis_dns: RedisDsn = 'redis://localhost:6379/0'
-    rabbitmq_dns: AmqpDsn = 'amqp://localhost:5672/'
+    redis_dns: RedisDsn = "redis://localhost:6379/0"
+    rabbitmq_dns: AmqpDsn = "amqp://localhost:5672/"
     celery_broker_url: str = redis_dns
     celery_result_backend: str = redis_dns
 
@@ -53,8 +55,10 @@ class Settings(BaseSettings):
     # usage:
     # source .env
     # python manage.py createsuperuser --noinput
+
     django_superuser_username: str = ""
     django_superuser_password: str = ""
     django_superuser_email: str = ""
+
 
 config = Settings()

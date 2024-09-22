@@ -5,7 +5,7 @@ from config import config
 
 
 class Command(BaseCommand):
-    help = 'Parse CSV files from a preconfigured directory to place trades in bulk'
+    help = "Parse CSV files from a preconfigured directory"
 
     def handle(self, *args, **options):
         csv_path = config.csv_path

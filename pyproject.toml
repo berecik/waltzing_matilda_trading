@@ -29,8 +29,8 @@ beret-utils = "*"
 psycopg2 = "*"
 django-prometheus = "*"  # Prometheus monitoring for Django in future
 pytest-cov = "*"
-redis = "^5.0.8"
-django-ninja-jwt = "^5.3.4"
+redis = "*"
+django-ninja-jwt = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"

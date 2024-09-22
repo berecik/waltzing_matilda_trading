@@ -11,18 +11,23 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     python3-dev \
     python3-poetry \
+    make \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY pyproject.toml /app/
-COPY README.md /app/
-
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi
+#COPY pyproject.toml /app/
+#COPY README.md /app/
+#
+#RUN poetry config virtualenvs.create false
+#RUN poetry install --no-interaction --no-ansi
 
 # Copy project
 COPY . /app/
 COPY docker.env /app/.env
+
+ENV PYTHONIOENCODING utf8
+
+RUN make docker-install
 
 # Expose port 8000
 EXPOSE 8000

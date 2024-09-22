@@ -14,19 +14,15 @@ from api.tasks import parse_csv
 async def test_parse_csv_task(create_csv_file, csv_data):
     # Create test users
     user1 = await sync_to_async(User.objects.create_user)(
-        username='john_doe', password='testpass'
+        username="john_doe", password="testpass"
     )
     user2 = await sync_to_async(User.objects.create_user)(
-        username='jane_doe', password='testpass'
+        username="jane_doe", password="testpass"
     )
 
     # Create test stocks
-    stock1 = await sync_to_async(Stock.objects.create)(
-        name='Apple', price=150.00
-    )
-    stock2 = await sync_to_async(Stock.objects.create)(
-        name='Google', price=2800.00
-    )
+    stock1 = await sync_to_async(Stock.objects.create)(name="Apple", price=150.00)
+    stock2 = await sync_to_async(Stock.objects.create)(name="Google", price=2800.00)
 
     # Create CSV file
     csv_path = await create_csv_file(csv_data)
