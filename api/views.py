@@ -1,17 +1,15 @@
-from ninja import NinjaAPI, Router
-from .models import Stock, Order
-from .schemas import OrderSchema, StockInvestmentSchema
-from django.shortcuts import get_object_or_404
-from ninja.security import django_auth
 from asgiref.sync import sync_to_async
-from ninja_jwt.controller import NinjaJWTDefaultController
+from django.shortcuts import get_object_or_404
+from ninja import Router
 from ninja_extra import NinjaExtraAPI
 from ninja_jwt.authentication import AsyncJWTAuth
+from ninja_jwt.controller import NinjaJWTDefaultController
+
+from .models import Stock, Order
+from .schemas import OrderSchema, StockInvestmentSchema
 
 api = NinjaExtraAPI()
 api.register_controllers(NinjaJWTDefaultController)
-
-# api = NinjaAPI()
 
 order_router = Router()
 

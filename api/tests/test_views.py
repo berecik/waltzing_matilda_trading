@@ -1,16 +1,11 @@
 from asgiref.sync import sync_to_async
-from django.test import TestCase
 from django.contrib.auth.models import User
+from django.test import TestCase
 from ninja.testing import TestAsyncClient
 from ninja_jwt.tokens import RefreshToken
-from twisted.protocols.amp import Decimal
-from zope.interface.common import optional
 
-from api.views import api
 from api.models import Stock, Order
-from datetime import datetime, timedelta
-import jwt
-from django.conf import settings
+from api.views import api
 
 ninja_test_client = TestAsyncClient(api)
 
@@ -22,14 +17,7 @@ class TestAsyncViews(TestCase):
         self.user.save()
         # Create a test stock
         self.stock = Stock.objects.create(name='TestStock', price=100)
-        # # Generate JWT token for authentication
-        # payload = {
-        #     'user_id': self.user.id,
-        #     'exp': datetime.now() + timedelta(hours=24),
-        #     'iat': datetime.now(),
-        # }
-        # self.token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-        # self.auth_header = {'Authorization': f'Bearer {self.token}'}
+        # # Generate JWT token authentication
         refresh = RefreshToken.for_user(self.user)
         access_token = str(refresh.access_token)
         self.client.headers = {

@@ -7,9 +7,9 @@ from os import PathLike
 from beret_utils import PathData
 from django.contrib.auth.models import User
 
-from config import base_dir, config
-from .models import Stock
 from api.models import Order
+from config import config
+from .models import Stock
 
 logger = logging.getLogger(__name__)
 

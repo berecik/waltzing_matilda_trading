@@ -69,7 +69,7 @@ python manage.py runserver
 
 #### 1. Place an Order
 
-- **URL**: `/api/orders/place_order`
+- **URL**: `/orders/place_order`
 - **Method**: `POST`
 - **Authentication**: Required (Basic Auth)
 - **Payload**:
@@ -92,7 +92,7 @@ python manage.py runserver
 
 #### 2. Retrieve Total Investment
 
-- **URL**: `/api/orders/total_investment/{stock_id}`
+- **URL**: `/orders/total_investment/{stock_id}`
 - **Method**: `GET`
 - **Authentication**: Required (Basic Auth)
 - **Response**:
@@ -102,3 +102,60 @@ python manage.py runserver
     "total_investment": 1500.00
   }
   ```
+  
+#### 4. Generate JWT Token
+
+- **URL**: `token/pair`
+- **Method**: `POST`
+- **Payload**
+  {
+    "username": "admin",
+    "password": "admin"
+  }
+- **Response**:
+
+  ```json
+  {
+    "username": "admin",
+    "refresh": "eyJ.....",
+    "access": "eyJ0eXA....."
+  }
+  ```
+
+#### 5. Refresh
+
+- **URL**: `/token/refresh`
+- **Method**: `POST`
+- **Payload**
+    {
+        "refresh": "eyJ....."
+    }
+- **Response**:
+
+  ```json
+  {
+    "access": "eyJ0eXA....."
+  }
+  ```
+
+#### 6. Verify
+
+- **URL**: `/token/verify`
+- **Method**: `POST`
+- **Payload**
+
+  ```json
+  {
+    "token": "eyJ0eXA....."
+  }
+  ```
+  
+- **Response**:
+
+  ```json
+  {}
+  ```
+
+#### 7. Documentation
+
+- **URL**: `/docs`

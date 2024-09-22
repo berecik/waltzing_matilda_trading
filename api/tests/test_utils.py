@@ -1,19 +1,12 @@
-import csv
 import os
 from contextlib import contextmanager
 
 import pytest
 from asgiref.sync import sync_to_async
-from beret_utils import PathData
 from django.contrib.auth.models import User
-from django.conf import settings
-from django.test import TestCase
-from twisted.protocols.amp import Decimal
 
-from api.models import Stock, Order
-from api.tasks import parse_csv
+from api.models import Stock
 from api.utils import scan_files, process_file, _data_processor
-from config import config, base_dir
 
 
 @pytest.mark.asyncio

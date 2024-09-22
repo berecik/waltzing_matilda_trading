@@ -3,7 +3,6 @@ import logging
 from beret_utils import PathData
 from celery import shared_task
 
-from config import config
 from .utils import process_file, scan_files
 
 logger = logging.getLogger(__name__)
