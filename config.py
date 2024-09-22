@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     project_env: str = 'local'
 
-    postgres_engine: str = 'django.contrib.gis.db.backends.postgis'
+    postgres_engine: str = 'django.db.backends.postgresql'
     postgres_db: str = project_name
     postgres_user: str = 'postgres'
     postgres_password: str = 'postgres'
