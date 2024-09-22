@@ -15,51 +15,51 @@ A scalable, high-performance trading system API built with Django, Django Ninja,
 
 ## Install and Usage
 
-### Clone the repository:
+#### 1. Clone the repository:
 
 ```bash
 git clone https://github.com/berecik/waltzing_matilda_trading.git
 cd waltzing_matilda_trading
 ```
 
-### Create a virtual environment and install the dependencies:
+#### 2. Create a virtual environment and install the dependencies:
 
 ```bash
 poetry install
 ```
 
-### Activate the virtual environment:
+#### 3. Activate the virtual environment:
 
 ```bash
 poetry shell
 ```
 
-### Create a `.env` file in the root directory and add the following environment variables:
+#### 4. Create a `.env` file in the root directory and add the following environment variables:
 
 ```bash
 cp .env.example .env
 ```
 
-### Edit the `.env` file, add the required values and load the environment variables:
+#### 5. Edit the `.env` file, add the required values and load the environment variables:
 
 ```bash
 vim .env
 source .env
 ```
 
-### Run the database migrations:
+#### 6. Run the database migrations:
 
 ```bash
 python manage.py migrate
 ```
 
-### Create a superuser:
+#### 7. Create a superuser:
 
 ```bash
 python manage.py createsuperuser --noinput
 ```
 
-### Run the development server:
+#### 8. Run the development server:
 
 ```bash
 python manage.py runserver
@@ -69,7 +69,7 @@ python manage.py runserver
 
 #### 1. Place an Order
 
-- **URL**: `/orders/place_order`
+- **URL**: `/orders/order`
 - **Method**: `POST`
 - **Authentication**: Required (Basic Auth)
 - **Payload**:
@@ -92,7 +92,7 @@ python manage.py runserver
 
 #### 2. Retrieve Total Investment
 
-- **URL**: `/orders/total_investment/{stock_id}`
+- **URL**: `/orders/total/{stock_id}`
 - **Method**: `GET`
 - **Authentication**: Required (Basic Auth)
 - **Response**:
@@ -105,7 +105,7 @@ python manage.py runserver
   
 #### 4. Generate JWT Token
 
-- **URL**: `token/pair`
+- **URL**: `/token/pair`
 - **Method**: `POST`
 - **Payload**
   {
@@ -122,7 +122,7 @@ python manage.py runserver
   }
   ```
 
-#### 5. Refresh
+#### 5. Refresh JWT Token
 
 - **URL**: `/token/refresh`
 - **Method**: `POST`
@@ -138,7 +138,7 @@ python manage.py runserver
   }
   ```
 
-#### 6. Verify
+#### 6. Verify JWT Token
 
 - **URL**: `/token/verify`
 - **Method**: `POST`
@@ -159,3 +159,15 @@ python manage.py runserver
 #### 7. Documentation
 
 - **URL**: `/docs`
+- **Method**: `GET`
+
+#### 8. Health Check
+
+- **URL**: `/health/heathz`
+- **Method**: `GET`
+
+
+#### 9. Readiness Check
+
+- **URL**: `/health/readiness`
+- **Method**: `GET`
