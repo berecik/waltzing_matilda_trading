@@ -9,21 +9,16 @@ class Stock(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def sells(self, user):
-        return self.order_set.filter(order_type="sell", user=user)
-
-    def buys(self, user):
-        return self.order_set.filter(order_type="buy", user=user)
+    def orders_sum(self, user, order_type):
+        sell_set = self.order_set.filter(order_type=order_type, user=user)
+        sell = sell_set.aggregate(models.Sum("quantity"))
+        return sell["quantity__sum"] or 0
 
     async def sum(self, user):
 
-        sell_set = await sync_to_async(self.sells)(user)
-        sell = await sync_to_async(sell_set.aggregate)(sum=models.Sum("quantity"))
-
-        buy_set = await sync_to_async(self.buys)(user)
-        buy = await sync_to_async(buy_set.aggregate)(sum=models.Sum("quantity"))
-
-        total = ((buy["sum"] or 0) - (sell["sum"] or 0)) * self.price
+        sell = await sync_to_async(self.orders_sum)(user, "sell")
+        buy = await sync_to_async(self.orders_sum)(user, "buy")
+        total = (buy - sell) * self.price
 
         return total
 
