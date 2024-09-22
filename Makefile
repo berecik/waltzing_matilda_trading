@@ -37,6 +37,27 @@ install: poetry
 superuser:
 	poetry run ./manage.py createsuperuser --noinput
 
+server:
+	poetry run ./manage.py runserver_plus
+
+shell:
+	poetry run ./manage.py shell_plus
+
+db-shell:
+	poetry run ./manage.py dbshell
+
+migrate:
+	poetry run ./manage.py migrate
+
+migrations:
+	poetry run ./manage.py makemigrations
+
+celery:
+	celery -A waltzing_matilda_trading worker --loglevel=info
+
+celery-beat:
+	celery -A waltzing_matilda_trading beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
 docker-install: generate_dot_env poetry
 	poetry config virtualenvs.create false
 	PYTHONIOENCODING=utf8 poetry install --no-interaction

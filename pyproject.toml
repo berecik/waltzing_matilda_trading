@@ -10,35 +10,40 @@ python = "^3.12"
 
 # Django framework
 Django = "^5.1"
+django-extensions = "*"  # Django tweaks collection for development
+werkzeug = "*"  # for Django extensions
 
 # Django Ninja asynchronous API framework
-django-ninja = "*"
-daphne = "*"
+django-ninja = "*"  # Django Ninja for asynchronous API
+daphne = "*"  # ASGI server for Django Ninja
+django-prometheus = "*"  # Prometheus monitoring for Django in future
+django-ninja-jwt = "*"  # JWT authentication for Django Ninja
 
 # Celery distributed task queue
-celery = "*"
-django-celery-beat = "*"
+celery = "*"  # Celery distributed task queue
+django-celery-beat = "*"  # Celery beat for Django
+redis = "*"  # Redis as default Celery broker
 
 # Settings management
-split_settings = "*"
-pydantic = "*"
-pydantic-settings = "*"
-beret-utils = "*"
+split_settings = "*"  # Split settings easy management
+pydantic = "*"  # Pydantic for API schemas
+pydantic-settings = "*"  # Pydantic based common configuration
+beret-utils = "*"  # PathData class for easy path, files and directories management
 
 # PostgreSQL database
 psycopg2 = "*"
-django-prometheus = "*"  # Prometheus monitoring for Django in future
-pytest-cov = "*"
-redis = "*"
-django-ninja-jwt = "*"
 
 [tool.poetry.group.dev.dependencies]
+
+# Testing
 pytest = "*"
+pytest-cov = "*"  # Coverage for pytest
 pytest-django = "*"
 pytest-asyncio = "*"
 pytest-celery = "*"
 httpx = "*"
 
+# Linters
 pep8 = "*"
 black = "*"
 

@@ -3,6 +3,7 @@ from config import config
 
 include(
     "base.py",
+    "django_extensions.py",
     "db.py",
     "local_apps.py",
     "celery.py",
