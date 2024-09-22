@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     env_file:
       - docker.env
     build:
@@ -15,6 +15,8 @@ services:
     depends_on:
       - postgres
       - redis
+    networks:
+       - djangonetwork
 
   worker:
     env_file:
@@ -28,6 +30,8 @@ services:
     depends_on:
       - postgres
       - redis
+    networks:
+       - djangonetwork
 
   beat:
     env_file:
@@ -41,18 +45,31 @@ services:
     depends_on:
       - postgres
       - redis
+    networks:
+       - djangonetwork
 
   redis:
-    image: redis:6
+    container_name: redis
+    image: redis:latest
     env_file:
       - docker.env
+    networks:
+       - djangonetwork
+
 
   postgres:
-    image: postgres:13-alpine
+    container_name: postgres
+    image: postgres:latest
     env_file:
       - docker.env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    networks:
+       - djangonetwork
 
 volumes:
   postgres_data:
+
+networks:
+      djangonetwork:
+          driver: bridge

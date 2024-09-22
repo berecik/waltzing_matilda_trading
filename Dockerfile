@@ -15,19 +15,18 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-#COPY pyproject.toml /app/
-#COPY README.md /app/
-#
-#RUN poetry config virtualenvs.create false
-#RUN poetry install --no-interaction --no-ansi
+COPY pyproject.toml /app/
+COPY docker.env /app/.env
+COPY README.md /app/
+COPY Makefile /app/
+ENV PYTHONIOENCODING utf8
+RUN make docker-install
 
 # Copy project
 COPY . /app/
+
+# Copy .env file for sure it was not overriden by the project
 COPY docker.env /app/.env
-
-ENV PYTHONIOENCODING utf8
-
-RUN make docker-install
 
 # Expose port 8000
 EXPOSE 8000
