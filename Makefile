@@ -62,6 +62,8 @@ docker-install: generate_dot_env poetry
 	poetry config virtualenvs.create false
 	PYTHONIOENCODING=utf8 poetry install --no-interaction
 
+github-install: github_dot_env docker-install
+
 deploy: generate_dot_env docker-build
 	docker-compose up -d
 
@@ -90,7 +92,12 @@ black:
 
 generate_dot_env:
 	@if [[ ! -e .env ]]; then \
-		cp .env.example .env; \
+		cp docker.env .env; \
+	fi
+
+github_dot_env:
+	@if [[ ! -e .env ]]; then \
+		cp docker.env .env; \
 	fi
 
 clean:
