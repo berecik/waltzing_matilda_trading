@@ -23,7 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip sqlite
+        python -m pip install --upgrade pip sqlite-utils
         cp github.env .env
         make github-install
     - name: Run Tests
