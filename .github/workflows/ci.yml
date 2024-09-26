@@ -18,7 +18,10 @@ jobs:
           python-version: 3.12
 
       - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.2
+        run: |
+#          curl -sSL https://install.python-poetry.org | python3 -
+          cp github.env .env
+          make github-install
 
       - name: Cache Poetry virtualenv
         uses: actions/cache@v1
