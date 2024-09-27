@@ -63,7 +63,7 @@ docker-install: generate_dot_env poetry
 	PYTHONIOENCODING=utf8 poetry install --no-interaction
 
 github-install: github_dot_env docker-install
-	PYTHONIOENCODING=utf8 poetry install --no-interaction --with-dev
+	PYTHONIOENCODING=utf8 poetry install --no-interaction --with dev
 
 deploy: generate_dot_env docker-build
 	docker-compose up -d
