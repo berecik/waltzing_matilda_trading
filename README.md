@@ -6,7 +6,7 @@ A scalable, high-performance trading system API built with Django, Django Ninja,
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.12+
 - Poetry
 - Redis
 - PostgreSQL

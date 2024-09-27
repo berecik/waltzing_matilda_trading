@@ -23,6 +23,7 @@ django-ninja-jwt = "*"  # JWT authentication for Django Ninja
 celery = "*"  # Celery distributed task queue
 django-celery-beat = "*"  # Celery beat for Django
 redis = "*"  # Redis as default Celery broker
+django-celery-results = "*"  # Celery results for Django
 
 # Settings management
 split_settings = "*"  # Split settings easy management
