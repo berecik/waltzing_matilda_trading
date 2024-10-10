@@ -153,3 +153,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # for other configurations
 HEALTH = False
+DJANGO_CMS = False
+TAGGIT = False
+REST_FRAMEWORK = False
+DJANGO_ALLAUTH = False
+DOCS = False
+DRF = False

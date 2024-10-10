@@ -18,8 +18,60 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from api.views import api
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", api.urls),
 ]
+
+drf_patterns = []
+
+
+if settings.DJANGO_ALLAUTH:
+    urlpatterns.append(path('accounts/', include('allauth.urls')))
+
+if settings.DRF:
+    from rest_framework.authtoken import views as auth_token_views
+
+    urlpatterns += drf_patterns
+    urlpatterns.append(path('api-token-auth/', auth_token_views.obtain_auth_token, name='api-token-auth'), )
+    # urlpatterns.append(
+    #     path(
+    #         "redoc/",
+    #         TemplateView.as_view(
+    #             template_name="redoc.html", extra_context={"schema_url": "openapi-schema"}
+    #         ),
+    #         name="redoc",
+    #     ),
+    # )
+
+if settings.DJANGO_CMS:
+    urlpatterns.append(path('', include('cms.urls')))
+
+if settings.TAGGIT:
+    urlpatterns.append(path('taggit_autosuggest/', include('taggit_autosuggest.urls')))
+
+if settings.DOCS:
+
+    from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
+    urlpatterns += [
+        path('schema/', SpectacularAPIView.as_view(), name='schema'),
+        # Optional UI:
+        path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+        path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))
+                   ] + urlpatterns
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+                          )
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.
+                          STATIC_ROOT)
+

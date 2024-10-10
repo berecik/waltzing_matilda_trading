@@ -13,6 +13,10 @@ Django = "^5.1"
 django-extensions = "*"  # Django tweaks collection for development
 werkzeug = "*"  # for Django extensions
 
+# Django REST framework
+djangorestframework = "*" # Django REST framework
+drf-spectacular = "*" # OpenAPI 3 schema generator for Django REST framework
+
 # Django Ninja asynchronous API framework
 django-ninja = "*"  # Django Ninja for asynchronous API
 daphne = "*"  # ASGI server for Django Ninja
@@ -33,6 +37,47 @@ beret-utils = "*"  # PathData class for easy path, files and directories managem
 
 # PostgreSQL database
 psycopg2 = "*"
+
+# Django CMS
+djangocms-installer = "*"  # Django CMS installer
+djangocms-blog = "*"  # Django CMS blog
+djangocms-comments = "*"  # Django CMS comments
+djangocms-file = "*"  # File plugin for Django CMS
+djangocms-flash = "*"  # Flash plugin for Django CMS
+djangocms-inherit = "*"  # Inherit plugin for Django CMS
+djangocms-link = "*"  # Link plugin for Django CMS
+djangocms-picture = "*"  # Picture plugin for Django CMS
+djangocms-googlemap = "*"  # Google Maps plugin for Django CMS
+djangocms-snippet = "*"  # Snippet plugin for Django CMS
+djangocms-style = "*"  # Style plugin for Django CMS
+djangocms-teaser = "*"  # Teaser plugin for Django CMS
+djangocms-text-ckeditor = "*" # Text CKEditor plugin for Django CMS
+djangocms-video = "*"  # Video plugin for Django CMS
+djangocms-column = "*"  # Column plugin for Django CMS
+djangocms-bootstrap4 = "*"  # Bootstrap 4 plugin for Django CMS
+djangocms-attributes-field = "*"  # Attributes field plugin for Django CMS
+djangocms-accordion = "*"  # Accordion plugin for Django CMS
+djangocms-redirect = "*"  # Redirect plugin for Django CMS
+djangocms-picture = "*"  # Picture plugin for Django CMS
+djangocms-googlemap = "*"  # Google Maps plugin for Django CMS
+djangocms-snippet = "*"  # Snippet plugin for Django CMS
+djangocms-style = "*"  # Style plugin for Django CMS
+djangocms-teaser = "*"  # Teaser plugin
+django-cms = "*" # Django CMS
+
+# Testing
+pytest = "*"
+pytest-cov = "*"  # Coverage for pytest
+pytest-django = "*"
+pytest-asyncio = "*"
+pytest-celery = "*"
+httpx = "*"
+
+# Linters
+pep8 = "*"
+black = "*"
+
+
 
 [tool.poetry.group.dev.dependencies]
 
